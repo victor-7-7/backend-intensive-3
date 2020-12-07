@@ -2,12 +2,12 @@
 import express from 'express';
 
 // Instruments
-import { get, post } from './route';
-import { getByHash, updateByHash, removeByHash } from './hash';
-import { addKeynote } from './hash/keynotes';
-import { getKeynoteByHash, removeKeynoteByHash } from './hash/keynotes/hash';
-import { getVideoByHash, removeVideoByHash } from './hash/videos/hash';
-import { addVideo } from './hash/videos';
+import { get, post } from './route.js';
+import { getByHash, updateByHash, removeByHash } from './hash/index.js';
+import { addKeynote } from './hash/keynotes/index.js';
+import { getKeynoteByHash, removeKeynoteByHash } from './hash/keynotes/hash/index.js';
+import { getVideoByHash, removeVideoByHash } from './hash/videos/hash/index.js';
+import { addVideo } from './hash/videos/index.js';
 
 export const router = express.Router();
 

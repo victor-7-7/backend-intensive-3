@@ -2,8 +2,8 @@
 import express from 'express';
 
 // Instruments
-import { login, logout } from './route';
-import { limiter } from '../../utils';
+import { login, logout } from './route.js';
+import { limiter } from '../../utils/index.js';
 
 export const router = express.Router();
 

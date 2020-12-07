@@ -33,6 +33,7 @@ logs/
 
 package-lock.json
 yarn.lock
+notes.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/webstorm,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=webstorm,node

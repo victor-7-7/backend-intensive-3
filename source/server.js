@@ -3,7 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 //Routers
-import * as routers from './routers';
+import * as routers from './routers/index.js';
 
 const app = express();
 

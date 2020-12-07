@@ -2,9 +2,9 @@
 import express from 'express';
 
 // Instruments
-import { get, post } from './route';
-import { getByHash, updateByHash, removeByHash } from './hash';
-import { enroll, expel } from './education';
+import { get, post } from './route.js';
+import { getByHash, updateByHash, removeByHash } from './hash/index.js';
+import { enroll, expel } from './education/index.js';
 
 export const router = express.Router();
 

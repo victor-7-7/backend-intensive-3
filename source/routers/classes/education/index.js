@@ -4,11 +4,9 @@ const debug = dg('router:classes:education');
 
 export const enroll = (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
-
     try {
-        const data = [];
-
-        res.status(200).json({ data });
+        // todo: update student record (enroll to class) in db
+        res.sendStatus(204);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -16,11 +14,9 @@ export const enroll = (req, res) => {
 
 export const expel = (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
-
     try {
-        const data = {};
-
-        res.status(201).json({ data });
+        // todo: update student record (expel from class) in db
+        res.sendStatus(204);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
