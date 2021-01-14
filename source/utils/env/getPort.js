@@ -5,7 +5,7 @@ export const getPort = () => {
         throw new Error('Environment variable PORT should be specified');
     }
 
-    const isValid = /^[3-9]{1}[0-9]{3}$/.test(PORT);
+    const isValid = /^[3-9][0-9]{3}$/.test(PORT);
 
     if (!isValid) {
         throw new Error(

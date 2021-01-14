@@ -3,11 +3,14 @@ import express from 'express';
 
 // Instruments
 import { login, logout } from './route.js';
-import { limiter } from '../../utils/index.js';
+import { limiter, checkAuth } from '../../utils/index.js';
 
-export const router = express.Router();
+export const authRouter = express.Router();
 
-router.post('/login', [ limiter(5, 60 * 1000) ], login);
-router.post('/logout', [ limiter(5, 60 * 1000) ], logout);
+// public endpoint
+authRouter.post('/login', [ limiter(5, 60 * 1000) ], login);
 
-export { router as auth };
+
+authRouter.post('/logout', [ limiter(5, 60 * 1000), checkAuth() ], logout);
+
+export { authRouter as auth };

@@ -5,17 +5,25 @@ import express from 'express';
 import { get, post } from './route.js';
 import { getByHash, updateByHash, removeByHash } from './hash/index.js';
 import { enroll, expel } from './education/index.js';
+import { checkAuth, checkHash, hints } from '../../utils/index.js';
 
-export const router = express.Router();
+export const classesRouter = express.Router();
 
-router.get('/', get);
-router.post('/', post);
+// public endpoint
+classesRouter.get('/', get);
 
-router.get('/:classHash', getByHash);
-router.put('/:classHash', updateByHash);
-router.delete('/:classHash', removeByHash);
+classesRouter.post('/', [ checkAuth() ], post);
 
-router.post('/:classHash/enroll', enroll);
-router.post('/:classHash/expel', expel);
+classesRouter.get('/:classHash',
+    [ checkAuth(), checkHash() ], getByHash);
+classesRouter.put('/:classHash',
+    [ checkAuth(), checkHash() ], updateByHash);
+classesRouter.delete('/:classHash',
+    [ checkAuth(), checkHash() ], removeByHash);
 
-export { router as classes };
+classesRouter.post('/:classHash/enroll',
+    [ checkAuth(), checkHash(hints.notLast) ], enroll);
+classesRouter.post('/:classHash/expel',
+    [ checkAuth(), checkHash(hints.notLast) ], expel);
+
+export { classesRouter as classes };

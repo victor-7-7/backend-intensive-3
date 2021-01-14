@@ -1,1 +1,1 @@
-export { createUser } from './userSchema.js';
+export { userScheme } from './userSchema.js';
