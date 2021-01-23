@@ -5,6 +5,7 @@ import winston from 'winston';
 
 //Routers
 import * as routers from './routers/index.js';
+import { NotFoundError } from './utils/index.js';
 
 const app = express();
 
@@ -45,17 +46,24 @@ app.use((req, res, next) => {
     next();
 });
 
+// Routers
+app.use('/auth', routers.auth);
+app.use('/users', routers.users);
+app.use('/classes', routers.classes);
+app.use('/lessons', routers.lessons);
+
+// Если не попали ни в один из вышеуказанных baseUrl (auth, users, classes, lessons),
+// либо попали, но внутри соответствующего роута не нашли подходящий путь, то это
+// означает, что эндпоинт невалиден. Движок начнет выполнять данный мидлвар
+app.use((req, res, next) => {
+    next(new NotFoundError(`Unknown endpoint (${req.method}): ${req.originalUrl}`));
+});
+
 app.use('/', (error, req, res, next) => {
     if (process.env.NODE_ENV !== 'test') {
         logger.error(`${new Date().toISOString()} ${error.name}: ${error.message}`);
     }
     next(error);
 });
-
-// Routers
-app.use('/auth', routers.auth);
-app.use('/users', routers.users);
-app.use('/classes', routers.classes);
-app.use('/lessons', routers.lessons);
 
 export { app };

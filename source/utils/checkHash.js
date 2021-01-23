@@ -35,15 +35,17 @@ export const checkHash = (hint) => (req, res, next) => {
             case 'lessons':
                 // Если хэш урока невалидный
                 if (!lessonsHashes.includes(previousHash)) {
-                    throw new NotFoundError(
+                    next(new NotFoundError(
                         `Lesson by hash ${previousHash} not found`, 404,
-                    );
+                    ));
                     // res.status(404).json(`Lesson by hash ${previousHash} not found`);
                     // return;
                 }
                 break;
             default:
-                res.sendStatus(400);
+                // Стейтмент недостижим, так как мы вызываем checkHash()
+                // при контролируемых нами условиях - категория будет валидной
+                // next(new NotFoundError(`Unknown endpoint (${req.method}): ${req.originalUrl}`));
         }
 
         // Проверяем второй хэш
@@ -52,9 +54,9 @@ export const checkHash = (hint) => (req, res, next) => {
                 if (videosHashes.includes(hash)) {
                     next();
                 } else {
-                    throw new NotFoundError(
+                    next(new NotFoundError(
                         `Video by hash ${hash} not found`, 404,
-                    );
+                    ));
                     // res.status(404).json(`Video by hash ${hash} not found`);
                 }
                 break;
@@ -62,14 +64,15 @@ export const checkHash = (hint) => (req, res, next) => {
                 if (keynotesHashes.includes(hash)) {
                     next();
                 } else {
-                    throw new NotFoundError(
+                    next(new NotFoundError(
                         `Keynote by hash ${hash} not found`, 404,
-                    );
+                    ));
                     // res.status(404).json(`Keynote by hash ${hash} not found`);
                 }
                 break;
             default:
-                res.sendStatus(400);
+                // Стейтмент недостижим
+                // next(new NotFoundError(`Unknown endpoint (${req.method}): ${req.originalUrl}`));
         }
     }
 
@@ -80,9 +83,9 @@ export const checkHash = (hint) => (req, res, next) => {
                 if (usersHashes.includes(hash)) {
                     next();
                 } else {
-                    throw new NotFoundError(
+                    next(new NotFoundError(
                         `User by hash ${hash} not found`, 404,
-                    );
+                    ));
                     // res.status(404).json(`User by hash ${hash} not found`);
                 }
                 break;
@@ -90,9 +93,9 @@ export const checkHash = (hint) => (req, res, next) => {
                 if (classesHashes.includes(hash)) {
                     next();
                 } else {
-                    throw new NotFoundError(
+                    next(new NotFoundError(
                         `Class by hash ${hash} not found`, 404,
-                    );
+                    ));
                     // res.status(404).json(`Class by hash ${hash} not found`);
                 }
                 break;
@@ -100,14 +103,15 @@ export const checkHash = (hint) => (req, res, next) => {
                 if (lessonsHashes.includes(hash)) {
                     next();
                 } else {
-                    throw new NotFoundError(
+                    next(new NotFoundError(
                         `Lesson by hash ${hash} not found`, 404,
-                    );
+                    ));
                     // res.status(404).json(`Lesson by hash ${hash} not found`);
                 }
                 break;
             default:
-                res.sendStatus(400);
+                // Стейтмент недостижим
+                // next(new NotFoundError(`Unknown endpoint (${req.method}): ${req.originalUrl}`));
         }
     }
 };

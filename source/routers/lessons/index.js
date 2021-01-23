@@ -10,7 +10,6 @@ import { getVideoByHash, removeVideoByHash } from './hash/videos/hash/index.js';
 import { addVideo } from './hash/videos/index.js';
 import { checkAuth, checkHash, hints } from '../../utils/index.js';
 
-
 export const lessonsRouter = express.Router();
 
 // public endpoint
@@ -39,5 +38,6 @@ lessonsRouter.get('/:lessonHash/keynotes/:keynoteHash',
     [ checkAuth(), checkHash(hints.couple) ], getKeynoteByHash);
 lessonsRouter.delete('/:lessonHash/keynotes/:keynoteHash',
     [ checkAuth(), checkHash(hints.couple) ], removeKeynoteByHash);
+
 
 export { lessonsRouter as lessons };
