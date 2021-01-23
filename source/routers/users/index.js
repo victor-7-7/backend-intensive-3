@@ -15,7 +15,6 @@ usersRouter.get('/', [ limiter(5, 60 * 1000), checkAuth() ], get);
 
 // public endpoint
 usersRouter.post('/', [ validator(userScheme) ], post);
-// usersRouter.post('/', post);
 
 usersRouter.get('/:userHash', [ checkAuth(), checkHash() ], getByHash);
 usersRouter.put('/:userHash', [ checkAuth(), checkHash() ], updateByHash);

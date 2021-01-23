@@ -1,3 +1,4 @@
+import { NotFoundError } from './index.js';
 
 const usersHashes = [ 'abc123', 'cab312', 'bca231' ];
 const classesHashes = [ 'abc123', 'cab312', 'bca231' ];
@@ -34,9 +35,11 @@ export const checkHash = (hint) => (req, res, next) => {
             case 'lessons':
                 // Если хэш урока невалидный
                 if (!lessonsHashes.includes(previousHash)) {
-                    res.status(404).json(`Lesson by hash ${previousHash} not found`);
-
-                    return;
+                    throw new NotFoundError(
+                        `Lesson by hash ${previousHash} not found`, 404,
+                    );
+                    // res.status(404).json(`Lesson by hash ${previousHash} not found`);
+                    // return;
                 }
                 break;
             default:
@@ -49,15 +52,20 @@ export const checkHash = (hint) => (req, res, next) => {
                 if (videosHashes.includes(hash)) {
                     next();
                 } else {
-                    res.status(404).json(`Video by hash ${hash} not found`);
-                    // res.sendStatus(404);
+                    throw new NotFoundError(
+                        `Video by hash ${hash} not found`, 404,
+                    );
+                    // res.status(404).json(`Video by hash ${hash} not found`);
                 }
                 break;
             case 'keynotes':
                 if (keynotesHashes.includes(hash)) {
                     next();
                 } else {
-                    res.status(404).json(`Keynote by hash ${hash} not found`);
+                    throw new NotFoundError(
+                        `Keynote by hash ${hash} not found`, 404,
+                    );
+                    // res.status(404).json(`Keynote by hash ${hash} not found`);
                 }
                 break;
             default:
@@ -72,22 +80,30 @@ export const checkHash = (hint) => (req, res, next) => {
                 if (usersHashes.includes(hash)) {
                     next();
                 } else {
-                    res.status(404).json(`User by hash ${hash} not found`);
-                    // res.sendStatus(404);
+                    throw new NotFoundError(
+                        `User by hash ${hash} not found`, 404,
+                    );
+                    // res.status(404).json(`User by hash ${hash} not found`);
                 }
                 break;
             case 'classes':
                 if (classesHashes.includes(hash)) {
                     next();
                 } else {
-                    res.status(404).json(`Class by hash ${hash} not found`);
+                    throw new NotFoundError(
+                        `Class by hash ${hash} not found`, 404,
+                    );
+                    // res.status(404).json(`Class by hash ${hash} not found`);
                 }
                 break;
             case 'lessons':
                 if (lessonsHashes.includes(hash)) {
                     next();
                 } else {
-                    res.status(404).json(`Lesson by hash ${hash} not found`);
+                    throw new NotFoundError(
+                        `Lesson by hash ${hash} not found`, 404,
+                    );
+                    // res.status(404).json(`Lesson by hash ${hash} not found`);
                 }
                 break;
             default:
