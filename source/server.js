@@ -1,27 +1,15 @@
 // Core
 import express from 'express';
 import bodyParser from 'body-parser';
-import winston from 'winston';
 
-//Routers
+// Routers
 import * as routers from './routers/index.js';
-import { NotFoundError } from './utils/index.js';
+
+// Utils
+import { NotFoundError, logger, notFoundErrLogger, validationErrLogger }
+    from './utils/index.js';
 
 const app = express();
-
-const logger = winston.createLogger({
-    level:      'debug',
-    format:     winston.format.simple(),
-    transports: [
-        // Write all logs with level `error` and below to `error.log`
-        new winston.transports.File({
-            filename: './logs/errors.log',
-            level:    'error',
-        }),
-        // Write all logs with level `debug` and below to console
-        new winston.transports.Console(),
-    ],
-});
 
 app.use(bodyParser.json({ limit: '10kb' }));
 
@@ -32,16 +20,6 @@ app.use((req, res, next) => {
             reqTimestamp: Date.now(),
             payload:      req.body,
         }));
-        /*
-          new Date().toTimeString() -> 22:40:57 GMT+0700 (GMT+07:00)
-          new Date().toLocaleTimeString() -> 22:37:24
-          new Date().toDateString() -> Wed Jan 13 2021
-          new Date().toLocaleString() -> Wed Jan 13 2021 22:28:29 GMT+0700 (GMT+07:00)
-          new Date().toUTCString() -> Wed, 13 Jan 2021 15:42:38 GMT
-          new Date().toISOString() -> 2021-01-13T15:43:11.834Z
-          new Date().getTime() -> 1610552701183 <- ms since 01.01.70 00:00:00
-          Date.now() -> 1610552701183 <- ms since 01.01.70 00:00:00
-        */
     }
     next();
 });
@@ -52,18 +30,32 @@ app.use('/users', routers.users);
 app.use('/classes', routers.classes);
 app.use('/lessons', routers.lessons);
 
-// Если не попали ни в один из вышеуказанных baseUrl (auth, users, classes, lessons),
-// либо попали, но внутри соответствующего роута не нашли подходящий путь, то это
-// означает, что эндпоинт невалиден. Движок начнет выполнять данный мидлвар
+// Если не попали ни в один из вышеуказанных рутов (auth, users, classes, lessons),
+// либо попали, но внутри соответствующего рутера не нашли подходящий путь, то это
+// означает, что эндпоинт невалиден. Движок начнет выполнять данный мидлвар (если
+// рутер не кинул ошибку)
 app.use((req, res, next) => {
-    next(new NotFoundError(`Unknown endpoint (${req.method}): ${req.originalUrl}`));
+    next(new NotFoundError('Unknown endpoint'));
 });
 
-app.use('/', (error, req, res, next) => {
+app.use('*', (error, req, res, next) => {
     if (process.env.NODE_ENV !== 'test') {
-        logger.error(`${new Date().toISOString()} ${error.name}: ${error.message}`);
+        let msg = `${new Date().toISOString()} ${req.method}: ${req.originalUrl}`;
+
+        if (error.name === 'NotFoundError') {
+            notFoundErrLogger.error(msg);
+        } else if (error.name === 'ValidationError') {
+            msg += ` ${error.message}`;
+            validationErrLogger.error(msg);
+        } else {
+            msg += ` ${error.name}: ${error.message}`;
+            logger.error(msg);
+        }
+
+        res.status(error.statusCode || 400).send(error.message);
+    } else {
+        next(error); // Кейс для тестирования
     }
-    next(error);
 });
 
 export { app };

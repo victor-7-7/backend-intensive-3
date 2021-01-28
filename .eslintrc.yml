@@ -204,7 +204,7 @@ rules:
         - allowSingleLine: true
     camelcase: 0
     comma-dangle:
-        - 2
+        - 1
         - arrays: always-multiline
           objects: always-multiline
           functions: always-multiline
@@ -351,6 +351,6 @@ rules:
     # Babel
     babel/no-invalid-this: 0
     babel/quotes:
-        - 2
+        - 1
         - single
     babel/new-cap: 0
