@@ -1,17 +1,28 @@
 // Core
 import express from 'express';
 import bodyParser from 'body-parser';
+import session from 'express-session';
 
 // Routers
 import * as routers from './routers/index.js';
 
 // Utils
-import { NotFoundError, logger, notFoundErrLogger, validationErrLogger }
-    from './utils/index.js';
+import { NotFoundError, logger, notFoundErrLogger, validationErrLogger,
+    sessionOptions, session_auth } from './utils/index.js';
 
 const app = express();
 
 app.use(bodyParser.json({ limit: '10kb' }));
+
+// Для прода включаем безопасность куков
+if (process.env.NODE_ENV === 'production') {
+    // Если браузер не будет иметь HTTPS connection,
+    // то он не пошлет куки серверу
+    sessionOptions.cookie.secure = true;
+}
+// Подключив механизм сессий, во всех запросах теперь
+// будем иметь сессионное свойство req.session
+app.use(session(sessionOptions));
 
 app.use((req, res, next) => {
     if (process.env.NODE_ENV !== 'production') {
@@ -23,6 +34,21 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+app.get('/', (req, res, next) => {
+    const currSession = req.session;
+    const { cookie } = req.headers;
+
+    res.setHeader('content-type', 'text/html');
+    res.status(200).send(`
+        <h1>Welcome home page!</h1>
+        <p>Raw session => ${JSON.stringify(currSession, null, 2)}</p>
+        <p>-----------------------------</p>
+        <p>Raw req.headers.cookie => ${cookie}</p>
+    `);
+});
+
+app.get('/api/auth/login', session_auth);
 
 // Routers
 app.use('/auth', routers.auth);
