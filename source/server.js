@@ -2,18 +2,34 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
+import passport from 'passport';
 
 // Routers
 import * as routers from './routers/index.js';
+import { pass_jwt_router } from './utils/auth/pass_jwt.js';
 
 // Utils
 import { NotFoundError, logger, notFoundErrLogger, validationErrLogger,
     sessionOptions, session_auth } from './utils/index.js';
+import { passConfig } from './utils/auth/pass_config.js';
 
 const app = express();
 
 app.use(bodyParser.json({ limit: '10kb' }));
 
+app.use((req, res, next) => {
+    if (process.env.NODE_ENV !== 'production') {
+        logger.info(JSON.stringify({
+            reqMethod:    req.method,
+            reqTimestamp: Date.now(),
+            reqBody:      req.body,
+        }));
+    }
+    next();
+});
+
+/*
+//===============================================
 // Для прода включаем безопасность куков
 if (process.env.NODE_ENV === 'production') {
     // Если браузер не будет иметь HTTPS connection,
@@ -23,17 +39,6 @@ if (process.env.NODE_ENV === 'production') {
 // Подключив механизм сессий, во всех запросах теперь
 // будем иметь сессионное свойство req.session
 app.use(session(sessionOptions));
-
-app.use((req, res, next) => {
-    if (process.env.NODE_ENV !== 'production') {
-        logger.info(JSON.stringify({
-            reqMethod:    req.method,
-            reqTimestamp: Date.now(),
-            payload:      req.body,
-        }));
-    }
-    next();
-});
 
 app.get('/', (req, res, next) => {
     const currSession = req.session;
@@ -49,6 +54,18 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/api/auth/login', session_auth);
+*/
+
+//===============================================
+// Конфигурируем глобальный объект passport, передав его
+// в функцию конфигурации
+passConfig(passport);
+// Инициализируем сконфигурированный паспорт
+app.use(passport.initialize());
+// Используем jwt-паспорт для аутентификации и авторизации на пути /api
+app.use('/api', pass_jwt_router);
+
+//===============================================
 
 // Routers
 app.use('/auth', routers.auth);

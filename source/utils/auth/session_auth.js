@@ -55,13 +55,13 @@ export const session_auth = async (req, res, next) => {
         // в массив из двух элементов
         const [ type, credentials ] = auth.split(' ');
         // Второй элемент превращаем в строку через буфер и сплитим на мыло и пароль
-        const [ email, password ] = Buffer.from(credentials, 'base64')
+        const [ reqUserEmail, password ] = Buffer.from(credentials, 'base64')
             .toString()
             .split(':');
         // Simulate DB search
         const user = await usersData.find(
-            // email - мыло, заданное юзером. userEmail - мыло из базы
-            ({ email: userEmail }) => email === userEmail,
+            // reqUserEmail - мыло, заданное юзером. dbUserEmail - мыло из базы
+            ({ email: dbUserEmail }) => reqUserEmail === dbUserEmail,
         );
         // Если юзер с таким мылом в базе не найден, или найден, но
         // пароль, заданный юзером не совпадает с имеющимся в базе
@@ -69,11 +69,11 @@ export const session_auth = async (req, res, next) => {
             return res.status(401).json({ message: 'credentials are not valid' });
         }
         // Создаем куку user.email и цепляем ее к сессии клиента
-        req.session.user = { email };
+        req.session.user = { email: reqUserEmail };
     } else {
         // Извлекаем куку из сессии
         const {user} = req.session;
-        // Если у куки нет поля email
+        // Если у куки user нет свойства email
         if (!user.email) {
             return res.status(401)
                 .json({message: 'credentials are not valid'});
