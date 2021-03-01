@@ -25,7 +25,7 @@ export const passConfig = (passport) => {
     // ответ 401 Unauthorized.
     // The JWT payload is passed into the verify callback
     passport.use(new Strategy(jwtOptions, function(jwt_payload, done) {
-        // jwt_payload: { "sub": "1", "iat": 1613268577126, "exp": 1613268663526 }
+        // jwt_payload: { "sub": "1613268617234", "iat": 1613268577126, "exp": 1613268663526 }
         // sub - идентификатор юзера, iat и exp - в секундах!
         console.log(jwt_payload);
 
@@ -34,10 +34,17 @@ export const passConfig = (passport) => {
         );
 
         if (user) { // <- юзер с таким _id найден в базе
-            console.log('User:', user);
+            console.log(`User with id ${jwt_payload.sub} is found:`, user);
 
+            // Express передаст управление следующему (после
+            // passport.authenticate) мидлвару
             return done(null, user);
         }
+
+        console.log(`User with id ${jwt_payload.sub} is not found`);
+        // Express не станет выполнять следующий (после
+        // passport.authenticate) мидлвар, а отправит клиенту
+        // ответ 401 Unauthorized
         done(null, false); // <- юзер с таким _id не найден
     }));
 };

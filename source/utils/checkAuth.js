@@ -1,7 +1,7 @@
 
 export const checkAuth = () => (req, res, next) => {
     const code = req.header('Authorization');
-    console.log('code: ', code);
+    console.log('Request header Authorization:', code);
 
     if (code === process.env.PASSWORD) {
         next();

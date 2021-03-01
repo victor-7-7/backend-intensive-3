@@ -1,6 +1,11 @@
 
 export const sessionOptions = {
-    key:               'user', // cookie name
+    // От браузера будет приходить кука session-id={session id}.
+    // Сервер будет иметь сессионный объект session,
+    // который будет прицеплен к каждому req-запросу.
+    // key -> это имя куки, в которой на стороне браузера
+    // будет храниться идентификатор сессии
+    key:               'session-id',
     // This is the secret used to sign the session ID cookie.
     // This can be either a string for a single secret, or an
     // array of multiple secrets.
@@ -25,7 +30,7 @@ export const sessionOptions = {
     // storage: new MemoryStorage(),
     cookie:            {
         httpOnly: true,
-        maxAge:   15 * 60 * 1000, // 15 min
+        maxAge:   15 * 60 * 1000, // (in milliseconds) 15 min
     },
 };
 
@@ -34,50 +39,30 @@ const usersData = [
     { email: 'jdoe2@example.com', password: '1234567' },
 ];
 
-// Authorization function
+// Check session
 export const session_auth = async (req, res, next) => {
-    // Если сессионное свойство user еще не создано
-    if (!req.session.user) {
-        const auth = req.headers.authorization;
-        // Если клиент не предоставил данных для авторизации
-        if (!auth) {
-            // Предлагаем пользователю залогиниться
-            res.setHeader('WWW-Authenticate', 'Basic');
+    // Мы имеем post-запрос (со страницы /sess/login), в теле
+    // которого есть свойства user и password
 
-            return  res.sendStatus(401);
-        }
-        // jdoe@example.com:123456 -> amRvZUBleGFtcGxlLmNvbToxMjM0NTY=
-        // В хедере Authorization запроса должна быть строка
-        // Basic amRvZUBleGFtcGxlLmNvbToxMjM0NTY=
-        console.log(auth);
-
-        // Строка 'Basic amRvZUBleGFtcGxlLmNvbToxMjM0NTY=' сплитится
-        // в массив из двух элементов
-        const [ type, credentials ] = auth.split(' ');
-        // Второй элемент превращаем в строку через буфер и сплитим на мыло и пароль
-        const [ reqUserEmail, password ] = Buffer.from(credentials, 'base64')
-            .toString()
-            .split(':');
-        // Simulate DB search
-        const user = await usersData.find(
-            // reqUserEmail - мыло, заданное юзером. dbUserEmail - мыло из базы
-            ({ email: dbUserEmail }) => reqUserEmail === dbUserEmail,
-        );
-        // Если юзер с таким мылом в базе не найден, или найден, но
-        // пароль, заданный юзером не совпадает с имеющимся в базе
-        if (!user || user.password !== password) {
-            return res.status(401).json({ message: 'credentials are not valid' });
-        }
-        // Создаем куку user.email и цепляем ее к сессии клиента
-        req.session.user = { email: reqUserEmail };
-    } else {
-        // Извлекаем куку из сессии
-        const {user} = req.session;
-        // Если у куки user нет свойства email
-        if (!user.email) {
-            return res.status(401)
-                .json({message: 'credentials are not valid'});
-        }
+    // Имитируем поиск юзера в базе данных приложения
+    const user = await usersData.find(
+        // req.body.user - мыло, заданное юзером. dbUserEmail - мыло из базы
+        ({ email: dbUserEmail }) => req.body.user === dbUserEmail,
+    );
+    // Если юзер с таким мылом в базе не найден, или найден, но
+    // пароль, заданный юзером не совпадает с имеющимся в базе
+    if (!user || user.password !== req.body.password) {
+        return res.status(401).json({ message: 'Credentials are not valid' });
     }
-    res.redirect('/');
+    // Юзер предоставил валидные мыло и пароль.
+    // Модифицируем сессионный объект
+    req.session.loggedIn = true;
+    req.session.username = req.body.user;
+    // Поскольку сессионный объект модифицирован, то он будет
+    // записан в сессионное хранилище, а к res-объекту будет
+    // добавлен заголовок Set-Cookie с именем куки session-id
+    // и значением идентификатора сессии
+
+    console.log('Session object:', req.session);
+    next();
 };

@@ -22,7 +22,7 @@ pass_jwt_router.post('/register', async (req, res, next) => {
     }
 
     const newUser = {
-        _id:      usersData.length + 1,
+        _id:      Date.now(),
         username: req.body.username,
         password: req.body.password,
     };

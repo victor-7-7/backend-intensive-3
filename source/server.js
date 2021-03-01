@@ -10,7 +10,7 @@ import { pass_jwt_router } from './utils/auth/pass_jwt.js';
 
 // Utils
 import { NotFoundError, logger, notFoundErrLogger, validationErrLogger,
-    sessionOptions, session_auth } from './utils/index.js';
+    sessionOptions } from './utils/index.js';
 import { passConfig } from './utils/auth/pass_config.js';
 
 const app = express();
@@ -20,15 +20,22 @@ app.use(bodyParser.json({ limit: '10kb' }));
 app.use((req, res, next) => {
     if (process.env.NODE_ENV !== 'production') {
         logger.info(JSON.stringify({
-            reqMethod:    req.method,
-            reqTimestamp: Date.now(),
-            reqBody:      req.body,
+            method:    req.method,
+            path:      req.path,
+            body:      req.body,
+            timestamp: Date.now(),
         }));
     }
     next();
 });
 
-/*
+app.get('/', (req, res, next) => {
+    res.setHeader('content-type', 'text/html');
+    res.status(200).send(`
+        <h1>Welcome home page!</h1>
+    `);
+});
+
 //===============================================
 // Для прода включаем безопасность куков
 if (process.env.NODE_ENV === 'production') {
@@ -40,21 +47,7 @@ if (process.env.NODE_ENV === 'production') {
 // будем иметь сессионное свойство req.session
 app.use(session(sessionOptions));
 
-app.get('/', (req, res, next) => {
-    const currSession = req.session;
-    const { cookie } = req.headers;
-
-    res.setHeader('content-type', 'text/html');
-    res.status(200).send(`
-        <h1>Welcome home page!</h1>
-        <p>Raw session => ${JSON.stringify(currSession, null, 2)}</p>
-        <p>-----------------------------</p>
-        <p>Raw req.headers.cookie => ${cookie}</p>
-    `);
-});
-
-app.get('/api/auth/login', session_auth);
-*/
+app.use('/sess', routers.sess);
 
 //===============================================
 // Конфигурируем глобальный объект passport, передав его
