@@ -8,7 +8,7 @@ export const pass_jwt_router = express.Router();
 //-------------------------------------------
 // Register a new user
 pass_jwt_router.post('/register', async (req, res, next) => {
-    // req.body must have username & password properties
+    // req.body object must have username & password properties
 
     // Simulate DB search
     const user = await usersData.find(
@@ -56,7 +56,7 @@ function issueJWT(user) {
 //-------------------------------------------
 // Validate an existing user and issue a JWT
 pass_jwt_router.post('/login', async (req, res, next) => {
-    // req.body must have username & password properties
+    // req.body object must have username & password properties
 
     // Simulate DB search
     const user = await usersData.find(

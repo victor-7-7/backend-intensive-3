@@ -6,7 +6,7 @@ export const getByHash = (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
         const mockData = 'GET /lessons/:lessonHash';
-        res.status(200).json(mockData);
+        res.status(200).json({ mockData });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -17,7 +17,7 @@ export const updateByHash = (req, res) => {
     try {
         // todo: update lessons data in db
         const mockData = 'PUT /lessons/:lessonHash';
-        res.status(200).json(mockData);
+        res.status(200).json({ mockData });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

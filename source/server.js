@@ -20,10 +20,10 @@ app.use(bodyParser.json({ limit: '10kb' }));
 app.use((req, res, next) => {
     if (process.env.NODE_ENV !== 'production') {
         logger.info(JSON.stringify({
-            method:    req.method,
-            path:      req.path,
-            body:      req.body,
-            timestamp: Date.now(),
+            method:      req.method,
+            originalUrl: req.originalUrl,
+            body:        req.body,
+            timestamp:   Date.now(),
         }));
     }
     next();
@@ -46,7 +46,8 @@ if (process.env.NODE_ENV === 'production') {
 // Подключив механизм сессий, во всех запросах теперь
 // будем иметь сессионное свойство req.session
 app.use(session(sessionOptions));
-
+// Используем express-session для аутентификации и авторизации на baseUrl /sess
+// Можно залогиниться через браузер (email: 'jdoe@example.com', password: '123456')
 app.use('/sess', routers.sess);
 
 //===============================================
@@ -55,13 +56,13 @@ app.use('/sess', routers.sess);
 passConfig(passport);
 // Инициализируем сконфигурированный паспорт
 app.use(passport.initialize());
-// Используем jwt-паспорт для аутентификации и авторизации на пути /api
-app.use('/api', pass_jwt_router);
+// Используем jwt-паспорт для аутентификации и авторизации на baseUrl /passjwt
+// Требуется регистрация через Postman
+app.use('/passjwt', pass_jwt_router);
 
 //===============================================
-
 // Routers
-app.use('/auth', routers.auth);
+app.use('/auth', routers.auth); // post:/login, post:/logout
 app.use('/users', routers.users);
 app.use('/classes', routers.classes);
 app.use('/lessons', routers.lessons);

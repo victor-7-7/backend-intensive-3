@@ -1,5 +1,19 @@
 
 export const checkAuth = () => (req, res, next) => {
+    console.log('checkAuth |><| req.session:', req.session);
+    if (!req.session.data) {
+        return res.sendStatus(401)
+            .json({ message: 'You are not authorized' }); // Unauthorized
+    }
+
+    if (req.session.data.email) {
+        next();
+    } else {
+        res.status(401).json({ message: 'authentication credentials are not valid' });
+    }
+};
+
+/*export const checkAuth = () => (req, res, next) => {
     const code = req.header('Authorization');
     console.log('Request header Authorization:', code);
 
@@ -7,9 +21,6 @@ export const checkAuth = () => (req, res, next) => {
         next();
     } else {
         next(new Error(`Invalid authorization header: ${code}`));
-
-        // throw new ValidationError('Invalid authorization header', 401);
-        // res.status(401).json({'Invalid authorization header'});
     }
-};
+};*/
 

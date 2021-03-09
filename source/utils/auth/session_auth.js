@@ -1,11 +1,11 @@
 
 export const sessionOptions = {
-    // От браузера будет приходить кука session-id={session id}.
+    // От браузера будет приходить кука sessionid={session id}.
     // Сервер будет иметь сессионный объект session,
     // который будет прицеплен к каждому req-запросу.
     // key -> это имя куки, в которой на стороне браузера
     // будет храниться идентификатор сессии
-    key:               'session-id',
+    key:               'sessionid',
     // This is the secret used to sign the session ID cookie.
     // This can be either a string for a single secret, or an
     // array of multiple secrets.
@@ -41,8 +41,8 @@ const usersData = [
 
 // Check session
 export const session_auth = async (req, res, next) => {
-    // Мы имеем post-запрос (со страницы /sess/login), в теле
-    // которого есть свойства user и password
+    // Мы имеем post-запрос на путь /sess/auth (со страницы /sess/login),
+    // в теле которого есть свойства user и password
 
     // Имитируем поиск юзера в базе данных приложения
     const user = await usersData.find(
@@ -60,9 +60,8 @@ export const session_auth = async (req, res, next) => {
     req.session.username = req.body.user;
     // Поскольку сессионный объект модифицирован, то он будет
     // записан в сессионное хранилище, а к res-объекту будет
-    // добавлен заголовок Set-Cookie с именем куки session-id
+    // добавлен заголовок Set-Cookie с именем куки sessionid
     // и значением идентификатора сессии
-
     console.log('Session object:', req.session);
     next();
 };

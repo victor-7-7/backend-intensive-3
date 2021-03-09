@@ -6,7 +6,8 @@ export const addVideo = (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
         // todo: add video for lesson in db
-        res.sendStatus(204);
+        const mockData = 'POST lessons/:lessonHash/videos';
+        res.status(201).json({ mockData }); // Created
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

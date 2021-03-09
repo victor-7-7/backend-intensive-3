@@ -39,5 +39,4 @@ lessonsRouter.get('/:lessonHash/keynotes/:keynoteHash',
 lessonsRouter.delete('/:lessonHash/keynotes/:keynoteHash',
     [ checkAuth(), checkHash(hints.couple) ], removeKeynoteByHash);
 
-
 export { lessonsRouter as lessons };

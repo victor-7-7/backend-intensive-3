@@ -1,4 +1,4 @@
-/* Global teardown modle.
+/* Global teardown module.
 **
 ** This module exports an async function that is triggered
 ** once after all test suites.

@@ -62,6 +62,9 @@ sessRouter.get('/login', (req, res, next) => {
 });
 
 // Про bodyParser - https://medium.com/@gohitvaranasi/how-to-use-body-parser-in-express-to-handle-different-post-requests-c58c29d45b46
+// Мы имеем post-запрос на путь /sess/auth (запрос отправлен
+// формой на странице /sess/login), в теле которого есть
+// свойства user и password
 sessRouter.post('/auth', bodyParser.urlencoded({
     extended: false, type:     '*/x-www-form-urlencoded' }), session_auth,
 (req, res, next) => {

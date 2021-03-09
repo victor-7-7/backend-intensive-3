@@ -5,7 +5,7 @@ const debug = dg('router:users');
 export const get = (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        const mockData = 'GET /users';
+        const mockData = [ 'GET /users' ]; // Следует вернуть массив
         res.status(200).json(mockData);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -17,7 +17,7 @@ export const post = (req, res) => {
     try {
         // todo: create a user based on req.body
         const mockData = 'POST /users';
-        res.status(201).json(mockData); // Created
+        res.status(201).json({ mockData }); // Created
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

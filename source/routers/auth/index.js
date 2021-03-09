@@ -10,7 +10,6 @@ export const authRouter = express.Router();
 // public endpoint
 authRouter.post('/login', [ limiter(5, 60 * 1000) ], login);
 
-
-authRouter.post('/logout', [ limiter(5, 60 * 1000), checkAuth() ], logout);
+authRouter.post('/logout', checkAuth(), [ limiter(5, 60 * 1000) ], logout);
 
 export { authRouter as auth };
