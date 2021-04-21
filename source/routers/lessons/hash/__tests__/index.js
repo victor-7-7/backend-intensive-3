@@ -11,8 +11,8 @@ describe('lessons/:lessonHash cases', () => {
         agent.post('/auth/login')
             .send({ foo: 'bar' })
             .then((res) => {
-                console.log('beforeAll | res.headers[ "set-cookie" ]:',
-                    res.headers[ 'set-cookie' ]);
+                /*console.log('beforeAll | res.headers[ "set-cookie" ]:',
+                    res.headers[ 'set-cookie' ]);*/
                 done();
             })
             .catch((error) => done(error));

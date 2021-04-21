@@ -10,7 +10,7 @@ import { pass_jwt_router } from './utils/auth/pass_jwt.js';
 
 // Utils
 import { NotFoundError, logger, notFoundErrLogger, validationErrLogger,
-    sessionOptions } from './utils/index.js';
+    sessionOptions } from './utils';
 import { passConfig } from './utils/auth/pass_config.js';
 
 const app = express();
@@ -18,7 +18,8 @@ const app = express();
 app.use(bodyParser.json({ limit: '10kb' }));
 
 app.use((req, res, next) => {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production'
+    && process.env.NODE_ENV !== 'test') {
         logger.info(JSON.stringify({
             method:      req.method,
             originalUrl: req.originalUrl,

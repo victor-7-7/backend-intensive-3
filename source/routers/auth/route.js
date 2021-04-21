@@ -7,7 +7,7 @@ export const login = (req, res) => {
     try {
         req.session.data = { email: 'jdoe@example.com' };
         // todo: login user
-        console.log('post /auth/login |><| req.session:', req.session);
+        // console.log('post /auth/login |><| req.session:', req.session);
         res.sendStatus(204); // No Content
     } catch (error) {
         res.status(400).json({ message: error.message });
