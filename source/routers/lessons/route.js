@@ -1,4 +1,5 @@
 import dg from 'debug';
+import { Lesson } from '../../controllers';
 
 const debug = dg('router:lessons');
 
@@ -12,12 +13,14 @@ export const get = (req, res) => {
     }
 };
 
-export const post = (req, res) => {
+export const post = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        // todo: create a lesson based on red.body
-        const mockData = 'POST /lessons';
-        res.status(201).json({ mockData });
+        /*const mockData = 'POST /lessons';
+        res.status(201).json({ mockData });*/
+        const lesson = new Lesson(req.body);
+        const result = await lesson.create();
+        res.status(201).json(result); // 201 - Created
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

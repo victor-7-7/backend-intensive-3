@@ -14,11 +14,10 @@ export const usersRouter = express.Router();
 usersRouter.get('/', [ limiter(5, 60 * 1000), checkAuth() ], get);
 
 // public endpoint
-usersRouter.post('/', [ validator(userScheme) ], post);
+usersRouter.post('/', /*[ validator(userScheme) ],*/ post);
 
 usersRouter.get('/:userHash', [ checkAuth(), checkHash() ], getByHash);
 usersRouter.put('/:userHash', [ checkAuth(), checkHash() ], updateByHash);
 usersRouter.delete('/:userHash', [ checkAuth(), checkHash() ], removeByHash);
 
 export { usersRouter as users };
-

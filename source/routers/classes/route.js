@@ -1,4 +1,5 @@
 import dg from 'debug';
+import { Class } from '../../controllers';
 
 const debug = dg('router:classes');
 
@@ -12,12 +13,14 @@ export const get = (req, res) => {
     }
 };
 
-export const post = (req, res) => {
+export const post = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        // todo: create a class based on red.body
-        const mockData = 'POST /classes';
-        res.status(201).json({ mockData }); // Created
+        /*const mockData = 'POST /classes';
+        res.status(201).json({ mockData });*/
+        const classInst = new Class(req.body);
+        const result = await classInst.create();
+        res.status(201).json(result); // 201 - Created
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
