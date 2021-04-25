@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const lessonSchema = new mongoose.Schema({
     title:        String,
     description:  String,
-    order:        Number,
+    order:        { type: Number, index: true },
     hash:         String,
     availability: [ String ],
     content:      {

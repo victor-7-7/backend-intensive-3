@@ -23,10 +23,12 @@ const classSchema = new mongoose.Schema({
         started: Date,
         closed:  Date,
     },
-    order:    Number,
+    order:    { type: Number, index: true },
     created:  Date,
     modified: Date,
 });
+
+classSchema.index({ title: 'text', description: 'text' });
 
 // Мангус добавит окончание s к названию коллекции в БД
 const classModel = mongoose.model('class', classSchema);
