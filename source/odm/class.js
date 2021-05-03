@@ -23,10 +23,8 @@ const classSchema = new mongoose.Schema({
         started: Date,
         closed:  Date,
     },
-    order:    { type: Number, index: true },
-    created:  Date,
-    modified: Date,
-});
+    order: { type: Number, index: true },
+}, { timestamps: { createdAt: 'created', updatedAt: 'modified' } });
 
 classSchema.index({ title: 'text', description: 'text' });
 

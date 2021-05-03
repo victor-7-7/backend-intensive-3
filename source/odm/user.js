@@ -31,9 +31,7 @@ const userSchema = new mongoose.Schema({
     notes:    String,
     hash:     { type: String, unique: true },
     disabled: Boolean,
-    created:  Date,
-    modified: Date,
-});
+}, { timestamps: { createdAt: 'created', updatedAt: 'modified' } });
 
 userSchema.index({ 'name.first': 1, 'name.last': 1 });
 // https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose

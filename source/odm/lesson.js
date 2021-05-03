@@ -25,9 +25,7 @@ const lessonSchema = new mongoose.Schema({
             },
         ],
     },
-    created:  Date,
-    modified: Date,
-});
+}, { timestamps: { createdAt: 'created', updatedAt: 'modified' } });
 
 // Мангус добавит окончание s к названию коллекции в БД
 const lessonModel = mongoose.model('lesson', lessonSchema);
