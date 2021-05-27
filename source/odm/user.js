@@ -1,5 +1,6 @@
 // ODM - Object Document Mapper
 import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 // Схема для user
 const userSchema = new mongoose.Schema({
@@ -28,8 +29,13 @@ const userSchema = new mongoose.Schema({
         github:   String,
         skype:    String,
     },
-    notes:    String,
-    hash:     { type: String, unique: true },
+    notes: String,
+    hash:  {
+        type:     String,
+        required: true,
+        unique:   true,
+        default:  () => uuidv4(),
+    },
     disabled: Boolean,
 }, { timestamps: { createdAt: 'created', updatedAt: 'modified' } });
 

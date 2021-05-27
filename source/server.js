@@ -63,6 +63,8 @@ app.use('/passjwt', pass_jwt_router);
 
 //===============================================
 // Routers
+// Чтобы прочие рутеры проходили проверку checkAuth(), надо один раз
+// вначале сделать POST-запрос на эндпоинт /auth/login
 app.use('/auth', routers.auth); // post:/login, post:/logout
 app.use('/users', routers.users);
 app.use('/classes', routers.classes);

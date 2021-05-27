@@ -1,33 +1,54 @@
 import dg from 'debug';
+import { Lesson } from '../../../controllers';
 
 const debug = dg('router:lessons:hash');
 
-export const getByHash = (req, res) => {
+// GET /lessons/:lessonHash
+export const getByHash = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        const mockData = 'GET /lessons/:lessonHash';
-        res.status(200).json({ mockData });
+        const lesson = new Lesson({});
+        const result = await lesson.getLesson(req.params.lessonHash);
+        // Если урок с таким хэшем не найден в базе, то result == null
+        if (!result) {
+            return res.status(404).json({message: 'Lesson not found'});
+        }
+        res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-export const updateByHash = (req, res) => {
+// PUT /lessons/:lessonHash
+export const updateByHash = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        // todo: update lessons data in db
-        const mockData = 'PUT /lessons/:lessonHash';
-        res.status(200).json({ mockData });
+        // В req.body должен быть update-объект, удовлетворяющий
+        // lessonSchema. В нем указаны поля lesson-объекта, подлежащие
+        // обновлению. Не должно быть свойства hash
+        const lesson = new Lesson(req.body);
+        const result = await lesson.updateLesson(req.params.lessonHash);
+        // Если урок с таким хэшем не найден в базе, то result == null
+        if (!result) {
+            return res.status(404).json({message: 'Lesson not found'});
+        }
+        res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-export const removeByHash = (req, res) => {
+// DELETE /lessons/:lessonHash
+export const removeByHash = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        // todo: delete this lesson in db
-        res.sendStatus(204);
+        const lesson = new Lesson({});
+        const result = await lesson.deleteLesson(req.params.lessonHash);
+        // Если урок с таким хэшем не найден в базе, то result == null
+        if (!result) {
+            return res.status(404).json({message: 'Lesson not found'});
+        }
+        res.sendStatus(204); // No Content
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

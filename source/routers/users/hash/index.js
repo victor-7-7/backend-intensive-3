@@ -1,31 +1,56 @@
 import dg from 'debug';
+import { User } from '../../../controllers';
+
 const debug = dg('router:users:hash');
 
-// userHash валиден, так как запрос проброшен сюда после checkHash()
-
-export const getByHash = (req, res) => {
-    debug(`${req.method} - ${req.originalUrl}`);
-    const mockData = 'GET /users/:userHash';
-    res.status(200).json({ mockData });
-};
-
-export const updateByHash = (req, res) => {
+// GET /users/:userHash
+export const getByHash = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        // todo: update user's data in db
-        const mockData = 'PUT /users/:userHash';
-        res.status(200).json({ mockData });
+        const user = new User({});
+        const result = await user.getUser(req.params.userHash);
+        // Если юзер с таким хэшем не найден в базе, то result == null
+        if (!result) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-export const removeByHash = (req, res) => {
+// PUT /users/:userHash
+export const updateByHash = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        // todo: delete this user in db
+        // В req.body должен быть update-объект, удовлетворяющий
+        // userSchema. В нем указаны поля user-объекта, подлежащие
+        // обновлению. Не должно быть свойства hash
+        const user = new User(req.body);
+        const result = await user.updateUser(req.params.userHash);
+        // Если юзер с таким хэшем не найден в базе, то result == null
+        if (!result) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// DELETE /users/:userHash
+export const removeByHash = async (req, res) => {
+    debug(`${req.method} - ${req.originalUrl}`);
+    try {
+        const user = new User({});
+        const result = await user.deleteUser(req.params.userHash);
+        // Если юзер с таким хэшем не найден в базе, то result == null
+        if (!result) {
+            return res.status(404).json({ message: 'User not found' });
+        }
         res.sendStatus(204); // No Content
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
+

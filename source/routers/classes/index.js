@@ -15,15 +15,15 @@ classesRouter.get('/', get);
 classesRouter.post('/', [ checkAuth() ], post);
 
 classesRouter.get('/:classHash',
-    [ checkAuth(), checkHash() ], getByHash);
+    [ checkAuth()/*, checkHash()*/ ], getByHash);
 classesRouter.put('/:classHash',
-    [ checkAuth(), checkHash() ], updateByHash);
+    [ checkAuth()/*, checkHash()*/ ], updateByHash);
 classesRouter.delete('/:classHash',
-    [ checkAuth(), checkHash() ], removeByHash);
+    [ checkAuth()/*, checkHash()*/ ], removeByHash);
 
 classesRouter.post('/:classHash/enroll',
-    [ checkAuth(), checkHash(hints.notLast) ], enroll);
+    [ checkAuth()/*, checkHash(hints.notLast)*/ ], enroll);
 classesRouter.post('/:classHash/expel',
-    [ checkAuth(), checkHash(hints.notLast) ], expel);
+    [ checkAuth()/*, checkHash(hints.notLast)*/ ], expel);
 
 export { classesRouter as classes };

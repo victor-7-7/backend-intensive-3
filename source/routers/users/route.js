@@ -3,21 +3,25 @@ import { User } from '../../controllers';
 
 const debug = dg('router:users');
 
-export const get = (req, res) => {
+// GET /users
+export const get = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        const mockData = [ 'GET /users' ]; // Следует вернуть массив
-        res.status(200).json(mockData);
+        const user = new User({});
+        // Если коллекция пустая, то result == []
+        const result = await user.getUsers();
+        res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
+// POST /users
 export const post = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        /*const mockData = 'POST /users';
-        res.status(201).json({ mockData });*/
+        // В req.body должен быть user-объект, удовлетворяющий userSchema
+        // (свойство hash отсутствует)
         const user = new User(req.body);
         const result = await user.create();
         res.status(201).json(result); // 201 - Created

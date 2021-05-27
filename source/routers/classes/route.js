@@ -3,23 +3,27 @@ import { Class } from '../../controllers';
 
 const debug = dg('router:classes');
 
-export const get = (req, res) => {
+// GET /classes
+export const get = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        const mockData = [ 'GET /classes' ]; // Следует вернуть массив
-        res.status(200).json(mockData);
+        const group  = new Class({});
+        // Если коллекция пустая, то result == []
+        const result = await group.getClasses();
+        res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
+// POST /classes
 export const post = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        /*const mockData = 'POST /classes';
-        res.status(201).json({ mockData });*/
-        const classInst = new Class(req.body);
-        const result = await classInst.create();
+        // В req.body должен быть class-объект, удовлетворяющий classSchema
+        // (свойство hash отсутствует)
+        const group = new Class(req.body);
+        const result = await group.create();
         res.status(201).json(result); // 201 - Created
     } catch (error) {
         res.status(400).json({ message: error.message });

@@ -18,25 +18,25 @@ lessonsRouter.get('/', get);
 lessonsRouter.post('/', [ checkAuth() ], post);
 
 lessonsRouter.get('/:lessonHash',
-    [ checkAuth(), checkHash() ], getByHash);
+    [ checkAuth()/*, checkHash()*/ ], getByHash);
 lessonsRouter.put('/:lessonHash',
-    [ checkAuth(), checkHash() ], updateByHash);
+    [ checkAuth()/*, checkHash()*/ ], updateByHash);
 lessonsRouter.delete('/:lessonHash',
-    [ checkAuth(), checkHash() ], removeByHash);
+    [ checkAuth()/*, checkHash()*/ ], removeByHash);
 
 lessonsRouter.post('/:lessonHash/videos',
-    [ checkAuth(), checkHash(hints.notLast) ], addVideo);
+    [ checkAuth()/*, checkHash(hints.notLast)*/ ], addVideo);
 lessonsRouter.post('/:lessonHash/keynotes',
-    [ checkAuth(), checkHash(hints.notLast) ], addKeynote);
+    [ checkAuth()/*, checkHash(hints.notLast)*/ ], addKeynote);
 
 lessonsRouter.get('/:lessonHash/videos/:videoHash',
-    [ checkAuth(), checkHash(hints.couple) ], getVideoByHash);
+    [ checkAuth()/*, checkHash(hints.couple)*/ ], getVideoByHash);
 lessonsRouter.delete('/:lessonHash/videos/:videoHash',
-    [ checkAuth(), checkHash(hints.couple) ], removeVideoByHash);
+    [ checkAuth()/*, checkHash(hints.couple)*/ ], removeVideoByHash);
 
 lessonsRouter.get('/:lessonHash/keynotes/:keynoteHash',
-    [ checkAuth(), checkHash(hints.couple) ], getKeynoteByHash);
+    [ checkAuth()/*, checkHash(hints.couple)*/ ], getKeynoteByHash);
 lessonsRouter.delete('/:lessonHash/keynotes/:keynoteHash',
-    [ checkAuth(), checkHash(hints.couple) ], removeKeynoteByHash);
+    [ checkAuth()/*, checkHash(hints.couple)*/ ], removeKeynoteByHash);
 
 export { lessonsRouter as lessons };

@@ -1,13 +1,24 @@
 // ODM - Object Document Mapper
 import mongoose from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 const classSchema = new mongoose.Schema({
     title:       String,
     description: String,
-    hash:        String,
-    students:    [
+    hash:        {
+        type:     String,
+        required: true,
+        unique:   true,
+        default:  () => uuidv4(),
+    },
+    students: [
         {
-            user:     mongoose.ObjectId,
+            // В свойство user должно быть записано значение _id
+            // user-документа из коллекции users БД. При необходимости
+            // на элементе массива students можно будет вызвать метод
+            // populate('user'), чтобы мангус присвоил свойству user
+            // полноценный user-документ из коллекции users БД
+            user:     { type: mongoose.ObjectId, ref: 'user' },
             status:   String,
             expelled: Boolean,
             notes:    String,
@@ -15,7 +26,12 @@ const classSchema = new mongoose.Schema({
     ],
     lessons: [
         {
-            lesson:    mongoose.ObjectId,
+            // В свойство lesson должно быть записано значение _id
+            // lesson-документа из коллекции lessons БД. При необходимости
+            // на элементе массива lessons можно будет вызвать метод
+            // populate('lesson'), чтобы мангус присвоил свойству lesson
+            // полноценный lesson-документ из коллекции lessons БД
+            lesson:    { type: mongoose.ObjectId, ref: 'lesson' },
             scheduled: Date,
         },
     ],
