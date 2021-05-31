@@ -2,7 +2,7 @@
 import { LogModel } from '../models';
 
 export class Log {
-    constructor(data) { // data <- объект лога согласно схемы
+    constructor(data) { // data <- объект лога согласно log-схемы
         this.model = {
             // Присваиваем полю экземпляр класса модели
             log: new LogModel(data),

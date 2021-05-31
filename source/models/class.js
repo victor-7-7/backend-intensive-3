@@ -18,7 +18,9 @@ export class ClassModel {
     // GET /classes
     async getClasses() {
         // Получаем из БД массив доков коллекции
-        return classModel.find({});
+        return classModel.find({}, '-_id -__v', { limit: 10 })
+            .populate({ path: 'students.user', select: '-_id -__v'})
+            .populate({ path: 'lessons.lesson', select: '-_id -__v'});
     }
 
     // GET /classes/:classHash
@@ -26,7 +28,9 @@ export class ClassModel {
         // Извлекаем док из коллекции по полю hash.
         // Если метод findOne не нашел требуемый док, то он
         // вернет - null
-        return classModel.findOne({ hash: hash });
+        return classModel.findOne({ hash: hash }, '-_id -__v')
+            .populate({ path: 'students.user', select: '-_id -__v'})
+            .populate({ path: 'lessons.lesson', select: '-_id -__v'});
     }
 
     // PUT /classes/:classHash

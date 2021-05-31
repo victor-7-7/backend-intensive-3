@@ -25,7 +25,7 @@ const lessonSchema = new mongoose.Schema({
                 title: String,
                 order: Number,
                 uri:   String,
-            },
+            }, { _id: false }, // Не добавлять автополе _id в video-объект
         ],
         keynotes: [
             {
@@ -38,7 +38,7 @@ const lessonSchema = new mongoose.Schema({
                 title: String,
                 order: Number,
                 uri:   String,
-            },
+            }, { _id: false }, // Не добавлять автополе _id в keynote-объект
         ],
     },
 }, { timestamps: { createdAt: 'created', updatedAt: 'modified' } });
