@@ -1,4 +1,3 @@
-
 import { classModel, userModel } from '../odm';
 
 export class ClassModel {
@@ -7,16 +6,14 @@ export class ClassModel {
     }
 
     // POST /classes
-    async create() {
+    create() {
         // Сохраняем документ this.data в соотв коллекцию БД.
         // Мангус автоматически задаст uuid для свойства hash документа
-        const result = await classModel.create(this.data);
-
-        return result;
+        return classModel.create(this.data);
     }
 
     // GET /classes
-    async getClasses() {
+    getClasses() {
         // Получаем из БД массив доков коллекции
         return classModel.find({}, '-_id -__v', { limit: 10 })
             .populate({ path: 'students.user', select: '-_id -__v'})
@@ -24,7 +21,7 @@ export class ClassModel {
     }
 
     // GET /classes/:classHash
-    async getClass(hash) {
+    getClass(hash) {
         // Извлекаем док из коллекции по полю hash.
         // Если метод findOne не нашел требуемый док, то он
         // вернет - null
@@ -34,7 +31,7 @@ export class ClassModel {
     }
 
     // PUT /classes/:classHash
-    async updateClass(hash) {
+    updateClass(hash) {
         // В коллекции ищется док по полю hash и обновляются
         // какие-то из его полей в соответствии с this.data.
         // Если метод findOneAndUpdate не нашел требуемый док,
@@ -43,7 +40,7 @@ export class ClassModel {
     }
 
     // DELETE /classes/:classHash
-    async deleteClass(hash) {
+    deleteClass(hash) {
         // В коллекции ищется док по полю hash и удаляется. Если метод
         // не нашел требуемый док, то он вернет - null. Если док был
         // найден, то метод вернет его (после удаления из базы)

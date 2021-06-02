@@ -1,4 +1,3 @@
-
 import { lessonModel } from '../odm';
 
 export class LessonModel {
@@ -7,22 +6,20 @@ export class LessonModel {
     }
 
     // POST /lessons
-    async create() {
+    create() {
         // Сохраняем документ this.data в соотв коллекцию БД.
         // Мангус автоматически задаст uuid для свойства hash документа
-        const result = await lessonModel.create(this.data);
-
-        return result;
+        return lessonModel.create(this.data);
     }
 
     // GET /lessons
-    async getLessons() {
+    getLessons() {
         // Получаем из БД массив доков коллекции
         return lessonModel.find({});
     }
 
     // GET /lessons/:lessonHash
-    async getLesson(hash) {
+    getLesson(hash) {
         // Извлекаем док из коллекции по полю hash.
         // Если метод findOne не нашел требуемый док, то он
         // вернет - null
@@ -30,7 +27,7 @@ export class LessonModel {
     }
 
     // PUT /lessons/:lessonHash
-    async updateLesson(hash) {
+    updateLesson(hash) {
         // В коллекции ищется док по полю hash и обновляются
         // какие-то из его полей в соответствии с this.data.
         // Если метод findOneAndUpdate не нашел требуемый док,
@@ -43,7 +40,7 @@ export class LessonModel {
     }
 
     // DELETE /lessons/:lessonHash
-    async deleteLesson(hash) {
+    deleteLesson(hash) {
         // В коллекции ищется док по полю hash и удаляется. Если метод
         // не нашел требуемый док, то он вернет - null. Если док был
         // найден, то метод вернет его (после удаления из базы)
@@ -51,7 +48,7 @@ export class LessonModel {
     }
 
     // POST lessons/:lessonHash/videos
-    async addVideoToLesson(hash) {
+    addVideoToLesson(hash) {
         // В коллекции уроков ищется док по полю hash и в массив
         // videos свойства content добавляется элемент, описывающий
         // видео -> this.data:
@@ -160,7 +157,7 @@ export class LessonModel {
     }
 
     // POST lessons/:lessonHash/keynotes
-    async addKeynoteToLesson(hash) {
+    addKeynoteToLesson(hash) {
         // В коллекции уроков ищется док по полю hash и в массив
         // keynotes свойства content добавляется элемент, описывающий
         // заметку к уроку -> this.data:

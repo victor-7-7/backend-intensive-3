@@ -1,4 +1,3 @@
-
 import { userModel } from '../odm';
 
 export class UserModel {
@@ -7,22 +6,20 @@ export class UserModel {
     }
 
     // POST /users
-    async create() {
+    create() {
         // Сохраняем документ this.data в коллекцию users БД.
         // Мангус автоматически задаст uuid для свойства hash документа
-        const result = await userModel.create(this.data);
-
-        return result;
+        return userModel.create(this.data);
     }
 
     // GET /users
-    async getUsers() {
+    getUsers() {
         // Получаем из БД массив доков коллекции users
         return userModel.find({});
     }
 
     // GET /users/:userHash
-    async getUser(hash) {
+    getUser(hash) {
         // Извлекаем из БД юзер-док по полю hash.
         // Если метод findOne не нашел требуемый док, то он
         // вернет - null
@@ -31,7 +28,7 @@ export class UserModel {
 
     // https://masteringjs.io/tutorials/mongoose/update
     // PUT /users/:userHash
-    async updateUser(hash) {
+    updateUser(hash) {
         // В БД ищется юзер-док по полю hash и обновляются
         // какие-то из его полей в соответствии с this.data.
         // Если метод findOneAndUpdate не нашел требуемый док,
@@ -40,7 +37,7 @@ export class UserModel {
     }
 
     // DELETE /users/:userHash
-    async deleteUser(hash) {
+    deleteUser(hash) {
         // В БД ищется юзер-док по полю hash и удаляется. Если метод
         // не нашел требуемый док, то он вернет - null. Если док был
         // найден, то метод вернет его (после удаления из базы)

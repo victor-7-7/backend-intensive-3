@@ -1,4 +1,3 @@
-
 import { UserModel } from '../models';
 
 export class User {
@@ -10,37 +9,27 @@ export class User {
     }
 
     // POST /users
-    async create() {
-        const result = await this.model.user.create();
-
-        return result;
+    create() {
+        return this.model.user.create();
     }
 
     // GET /users
-    async getUsers() {
-        const result = await this.model.user.getUsers();
-
-        return result;
+    getUsers() {
+        return this.model.user.getUsers();
     }
 
     // GET /users/:userHash
-    async getUser(hash) {
-        const result = await this.model.user.getUser(hash);
-
-        return result;
+    getUser(hash) {
+        return this.model.user.getUser(hash);
     }
 
     // PUT /users/:userHash
-    async updateUser(hash) {
-        const result = await this.model.user.updateUser(hash);
-
-        return result;
+    updateUser(hash) {
+        return this.model.user.updateUser(hash);
     }
 
     // DELETE /users/:userHash
-    async deleteUser(hash) {
-        const result = await this.model.user.deleteUser(hash);
-
-        return result;
+    deleteUser(hash) {
+        return this.model.user.deleteUser(hash);
     }
 }

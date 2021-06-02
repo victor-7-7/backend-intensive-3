@@ -1,4 +1,3 @@
-
 import { LessonModel } from '../models';
 
 export class Lesson {
@@ -10,79 +9,57 @@ export class Lesson {
     }
 
     // POST /lessons
-    async create() {
-        const result = await this.model.lesson.create();
-
-        return result;
+    create() {
+        return this.model.lesson.create();
     }
 
     // GET /lessons
-    async getLessons() {
-        const result = await this.model.lesson.getLessons();
-
-        return result;
+    getLessons() {
+        return this.model.lesson.getLessons();
     }
 
     // GET /lessons/:lessonHash
-    async getLesson(hash) {
-        const result = await this.model.lesson.getLesson(hash);
-
-        return result;
+    getLesson(hash) {
+        return this.model.lesson.getLesson(hash);
     }
 
     // PUT /lessons/:lessonHash
-    async updateLesson(hash) {
-        const result = await this.model.lesson.updateLesson(hash);
-
-        return result;
+    updateLesson(hash) {
+        return this.model.lesson.updateLesson(hash);
     }
 
     // DELETE /lessons/:lessonHash
-    async deleteLesson(hash) {
-        const result = await this.model.lesson.deleteLesson(hash);
-
-        return result;
+    deleteLesson(hash) {
+        return this.model.lesson.deleteLesson(hash);
     }
 
     // POST lessons/:lessonHash/videos
-    async addVideoToLesson(hash) {
-        const result = await this.model.lesson.addVideoToLesson(hash);
-
-        return result;
+    addVideoToLesson(hash) {
+        return this.model.lesson.addVideoToLesson(hash);
     }
 
     // GET /lessons/:lessonHash/videos/:videoHash
-    async getVideoByHash(lessonHash, videoHash) {
-        const result = await this.model.lesson.getVideoByHash(lessonHash, videoHash);
-
-        return result;
+    getVideoByHash(lessonHash, videoHash) {
+        return this.model.lesson.getVideoByHash(lessonHash, videoHash);
     }
 
     // DELETE /lessons/:lessonHash/videos/:videoHash
-    async removeVideoByHash(lessonHash, videoHash) {
-        const result = await this.model.lesson.removeVideoByHash(lessonHash, videoHash);
-
-        return result;
+    removeVideoByHash(lessonHash, videoHash) {
+        return this.model.lesson.removeVideoByHash(lessonHash, videoHash);
     }
 
     // POST lessons/:lessonHash/keynotes
-    async addKeynoteToLesson(hash) {
-        const result = await this.model.lesson.addKeynoteToLesson(hash);
-
-        return result;
+    addKeynoteToLesson(hash) {
+        return this.model.lesson.addKeynoteToLesson(hash);
     }
 
     // GET /lessons/:lessonHash/keynotes/:keynoteHash
-    async getKeynoteByHash(lessonHash, keynoteHash) {
-        const result = await this.model.lesson.getKeynoteByHash(lessonHash, keynoteHash);
-
-        return result;
+    getKeynoteByHash(lessonHash, keynoteHash) {
+        return this.model.lesson.getKeynoteByHash(lessonHash, keynoteHash);
     }
 
     // DELETE /lessons/:lessonHash/keynotes/:keynoteHash
-    async removeKeynoteByHash(lessonHash, keynoteHash) {
-        const result = await this.model.lesson.removeKeynoteByHash(lessonHash, keynoteHash);
-
-        return result;
+    removeKeynoteByHash(lessonHash, keynoteHash) {
+        return this.model.lesson.removeKeynoteByHash(lessonHash, keynoteHash);
     }
 }

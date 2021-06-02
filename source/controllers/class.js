@@ -1,4 +1,3 @@
-
 import { ClassModel } from '../models';
 
 export class Class {
@@ -9,51 +8,37 @@ export class Class {
         };
     }
 
-    async create() {
-        const result = await this.model.class.create();
-
-        return result;
+    create() {
+        return this.model.class.create();
     }
 
     // GET /classes
-    async getClasses() {
-        const result = await this.model.class.getClasses();
-
-        return result;
+    getClasses() {
+        return this.model.class.getClasses();
     }
 
     // GET /classes/:classHash
-    async getClass(hash) {
-        const result = await this.model.class.getClass(hash);
-
-        return result;
+    getClass(hash) {
+        return this.model.class.getClass(hash);
     }
 
     // PUT /classes/:classHash
-    async updateClass(hash) {
-        const result = await this.model.class.updateClass(hash);
-
-        return result;
+    updateClass(hash) {
+        return this.model.class.updateClass(hash);
     }
 
     // DELETE /classes/:classHash
-    async deleteClass(hash) {
-        const result = await this.model.class.deleteClass(hash);
-
-        return result;
+    deleteClass(hash) {
+        return this.model.class.deleteClass(hash);
     }
 
     // POST /classes/:classHash/enroll - зачислить студента на поток
-    async enrollToClass(hash) {
-        const result = await this.model.class.enrollToClass(hash);
-
-        return result;
+    enrollToClass(hash) {
+        return this.model.class.enrollToClass(hash);
     }
 
     // POST /classes/:classHash/expel - отчислить студента с потока
-    async expelFromClass(hash) {
-        const result = await this.model.class.expelFromClass(hash);
-
-        return result;
+    expelFromClass(hash) {
+        return this.model.class.expelFromClass(hash);
     }
 }

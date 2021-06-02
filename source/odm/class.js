@@ -18,7 +18,7 @@ const classSchema = new mongoose.Schema({
             // на элементе массива students можно будет вызвать метод
             // populate('user'), чтобы мангус присвоил свойству user
             // полноценный user-документ из коллекции users БД
-            user:     { type: mongoose.ObjectId, ref: 'user' },
+            user:     { type: mongoose.SchemaTypes.ObjectId, ref: 'user' },
             status:   String,
             expelled: Boolean,
             notes:    String,
@@ -31,7 +31,7 @@ const classSchema = new mongoose.Schema({
             // на элементе массива lessons можно будет вызвать метод
             // populate('lesson'), чтобы мангус присвоил свойству lesson
             // полноценный lesson-документ из коллекции lessons БД
-            lesson:    { type: mongoose.ObjectId, ref: 'lesson' },
+            lesson:    { type: mongoose.SchemaTypes.ObjectId, ref: 'lesson' },
             scheduled: Date,
         },
     ],

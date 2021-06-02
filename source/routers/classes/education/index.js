@@ -1,5 +1,5 @@
 import dg from 'debug';
-import {Class} from "../../../controllers";
+import { Class } from '../../../controllers';
 
 const debug = dg('router:classes:education');
 
