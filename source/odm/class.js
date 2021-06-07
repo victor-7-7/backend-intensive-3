@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
 const classSchema = new mongoose.Schema({
-    title:       String,
-    description: String,
+    title:       { type: String, maxlength: 30 },
+    description: { type: String, maxlength: 250 },
     hash:        {
         type:     String,
         required: true,
@@ -21,7 +21,7 @@ const classSchema = new mongoose.Schema({
             user:     { type: mongoose.SchemaTypes.ObjectId, ref: 'user' },
             status:   String,
             expelled: Boolean,
-            notes:    String,
+            notes:    { type: String, maxlength: 250 },
         },
     ],
     lessons: [
@@ -39,10 +39,14 @@ const classSchema = new mongoose.Schema({
         started: Date,
         closed:  Date,
     },
-    order: { type: Number, index: true },
+    order: { type: Number, min: 0, index: true },
 }, { timestamps: { createdAt: 'created', updatedAt: 'modified' } });
 
 classSchema.index({ title: 'text', description: 'text' });
+
+classSchema.path('duration').validate(function (value) {
+    return value.started < value.closed;
+}, 'Class start date must be less then close date');
 
 // Мангус добавит окончание s к названию коллекции в БД
 const classModel = mongoose.model('class', classSchema);

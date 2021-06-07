@@ -7,7 +7,7 @@ export class ClassModel {
 
     // POST /classes
     create() {
-        // Сохраняем документ this.data в соотв коллекцию БД.
+        // Сохраняем class-документ this.data в соотв коллекцию БД.
         // Мангус автоматически задаст uuid для свойства hash документа
         return classModel.create(this.data);
     }
