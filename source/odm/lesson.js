@@ -1,6 +1,7 @@
 // ODM - Object Document Mapper
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
+import { urlValidator } from '../utils/urlValidator';
 
 const videoOrKeynoteSchema = new mongoose.Schema({
     hash: {
@@ -12,12 +13,9 @@ const videoOrKeynoteSchema = new mongoose.Schema({
     title: { type: String, maxlength: 30 },
     order: { type: Number, min: 0 },
     uri:   {
-        type:  String,
-        trim:  true,
-        match: [
-            /^(ftp|http|https):\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@\-/]))?/,
-            'Invalid URL',
-        ],
+        type:     String,
+        trim:     true,
+        validate: [ urlValidator, 'Invalid URL' ],
     },
 }, { _id: false }); // Не добавлять автополе _id в video/keynote-объект
 

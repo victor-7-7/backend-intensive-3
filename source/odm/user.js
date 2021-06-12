@@ -2,11 +2,7 @@
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-function urlValidator(value) {
-    const regex = /(ftp|http|https):\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@\-/]))?/;
-
-    return regex.test(value);
-}
+import { urlValidator } from '../utils/urlValidator.js';
 
 // Схема для user
 const userSchema = new mongoose.Schema({
@@ -16,8 +12,10 @@ const userSchema = new mongoose.Schema({
     },
     phones: [
         {
+            _id:   false, // Не добавлять автополе _id
             phone: {
                 type:     String,
+                trim:     true,
                 validate: {
                     validator(value) {
                         return /^\d{3}-\d{3}-\d{4}$/.test(value);
@@ -35,6 +33,7 @@ const userSchema = new mongoose.Schema({
     ],
     emails: [
         {
+            _id:   false,
             email: {
                 type:      String,
                 trim:      true,
@@ -42,22 +41,36 @@ const userSchema = new mongoose.Schema({
                 unique:    true,
                 // https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax
                 // https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
+                // https://habr.com/ru/post/175375/
+                // Проще послать проверочный код на указанное мыло,
+                // чем валидировать его синтаксис
                 match:     [
-                    /^[\w.+-]+@[A-z0-9-]+\.[A-z0-9.-]+$/,
-                    'Please add a valid email address',
+                    // (?:value)? or (?:red|green|blue) <-- non-capturing group. This is
+                    // more efficient if you don’t plan to use the group’s contents.
+                    /^[\w.!?#$%&^`'*+~={}/|-]+@[A-z0-9](?:[A-z0-9-]{0,61}[A-z0-9])?(?:\.[A-z0-9](?:[A-z0-9-]{0,61}[A-z0-9])?)*$/,
+                    /*
+                    /.+@.+\..+/i,
+                    */
+                    'Please set a valid email address',
                 ],
             },
             primary: Boolean,
         },
     ],
     password: String,
-    sex:      String,
-    roles:    [ String ],
-    social:   {
-        facebook: { type: String, validate: [ urlValidator, 'Invalid URL' ] },
-        linkedin: { type: String, validate: [ urlValidator, 'Invalid URL' ] },
-        github:   { type: String, validate: [ urlValidator, 'Invalid URL' ] },
-        skype:    { type: String, validate: [ urlValidator, 'Invalid URL' ] },
+    sex:      {
+        type: String,
+        enum: {
+            values:  [ 'm', 'f' ],
+            message: 'You should write - m or f',
+        },
+    },
+    roles:  [ String ],
+    social: {
+        facebook: { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
+        linkedin: { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
+        github:   { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
+        skype:    { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
     },
     notes: { type: String, maxlength: 250 },
     hash:  {

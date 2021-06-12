@@ -7,7 +7,7 @@ export class LessonModel {
 
     // POST /lessons
     create() {
-        // Сохраняем документ this.data в соотв коллекцию БД.
+        // Создаем и сохраняем lesson-документ this.data в соотв коллекцию БД.
         // Мангус автоматически задаст uuid для свойства hash документа
         return lessonModel.create(this.data);
     }
@@ -28,15 +28,22 @@ export class LessonModel {
 
     // PUT /lessons/:lessonHash
     updateLesson(hash) {
+        // Проверяем, что апдейт не касается поля hash и
+        // поля content. Если такие поля есть,
+        // то удаляем их из апдейта.
+        const upd = this.data;
+        if ('hash' in upd) {
+            delete upd.hash;
+        }
+        if ('content' in upd) {
+            delete upd.content;
+        }
+
         // В коллекции ищется док по полю hash и обновляются
         // какие-то из его полей в соответствии с this.data.
         // Если метод findOneAndUpdate не нашел требуемый док,
         // то он вернет - null
-        return lessonModel.findOneAndUpdate(
-            { hash: hash },
-            this.data,
-            { new: true },
-        );
+        return lessonModel.findOneAndUpdate({ hash: hash }, upd, { new: true });
     }
 
     // DELETE /lessons/:lessonHash
@@ -62,8 +69,9 @@ export class LessonModel {
         return lessonModel.findOneAndUpdate(
             { hash: hash },
             { $push: { 'content.videos': this.data }},
-            { new: true, projection: 'content.videos' },
+            { new: true, projection: 'content.videos', runValidators: true },
         );
+        // runValidators: true - чтобы срабатывали схемные валидаторы
     }
 
     // GET /lessons/:lessonHash/videos/:videoHash
@@ -171,8 +179,9 @@ export class LessonModel {
         return lessonModel.findOneAndUpdate(
             { hash: hash },
             { $push: { 'content.keynotes': this.data }},
-            { new: true, projection: 'content.keynotes' },
+            { new: true, projection: 'content.keynotes', runValidators: true },
         );
+        // runValidators: true - чтобы срабатывали схемные валидаторы
     }
 
     // GET /lessons/:lessonHash/keynotes/:keynoteHash

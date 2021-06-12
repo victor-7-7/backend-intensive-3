@@ -7,7 +7,7 @@ export class UserModel {
 
     // POST /users
     create() {
-        // Сохраняем документ this.data в коллекцию users БД.
+        // Создаем и сохраняем user-документ this.data в коллекцию users БД.
         // Мангус автоматически задаст uuid для свойства hash документа
         return userModel.create(this.data);
     }
@@ -29,11 +29,23 @@ export class UserModel {
     // https://masteringjs.io/tutorials/mongoose/update
     // PUT /users/:userHash
     updateUser(hash) {
+        // Проверяем, что апдейт не касается поля hash Если
+        // такое поле есть, то удаляем его из апдейта.
+        const upd = this.data;
+        if ('hash' in upd) {
+            delete upd.hash;
+        }
+
         // В БД ищется юзер-док по полю hash и обновляются
         // какие-то из его полей в соответствии с this.data.
         // Если метод findOneAndUpdate не нашел требуемый док,
         // то он вернет - null
-        return userModel.findOneAndUpdate({ hash: hash }, this.data, { new: true });
+        return userModel.findOneAndUpdate(
+            { hash: hash },
+            upd,
+            { new: true, runValidators: true },
+            // runValidators: true - чтобы срабатывали схемные валидаторы
+        );
     }
 
     // DELETE /users/:userHash

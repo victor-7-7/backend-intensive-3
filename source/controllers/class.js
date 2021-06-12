@@ -1,4 +1,5 @@
 import { ClassModel } from '../models';
+import {pushLessonToClass} from "../routers/classes/education";
 
 export class Class {
     constructor(data) { // data <- req.body or {}
@@ -40,5 +41,10 @@ export class Class {
     // POST /classes/:classHash/expel - отчислить студента с потока
     expelFromClass(hash) {
         return this.model.class.expelFromClass(hash);
+    }
+
+    // POST /classes/:classHash/lesson - добавить урок в программу класса
+    pushLessonToClass(hash) {
+        return this.model.class.pushLessonToClass(hash);
     }
 }

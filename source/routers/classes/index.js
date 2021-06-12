@@ -4,7 +4,7 @@ import express from 'express';
 // Instruments
 import { get, post } from './route.js';
 import { getByHash, updateByHash, removeByHash } from './hash/index.js';
-import { enroll, expel } from './education/index.js';
+import { enroll, expel, pushLessonToClass } from './education/index.js';
 import { checkAuth, checkHash, hints } from '../../utils/index.js';
 
 export const classesRouter = express.Router();
@@ -25,5 +25,7 @@ classesRouter.post('/:classHash/enroll',
     [ checkAuth()/*, checkHash(hints.notLast)*/ ], enroll);
 classesRouter.post('/:classHash/expel',
     [ checkAuth()/*, checkHash(hints.notLast)*/ ], expel);
+
+classesRouter.post('/:classHash/lesson', [ checkAuth() ], pushLessonToClass);
 
 export { classesRouter as classes };
