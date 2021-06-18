@@ -1,4 +1,4 @@
-import { userModel } from '../odm';
+import { userModel, studentModel, staffModel } from '../odm';
 
 export class UserModel {
     constructor(data) { // data <- req.body or {}
@@ -7,14 +7,33 @@ export class UserModel {
 
     // POST /users
     create() {
-        // Создаем и сохраняем user-документ this.data в коллекцию users БД.
+        // Создаем и сохраняем документ this.data в коллекцию users БД.
         // Мангус автоматически задаст uuid для свойства hash документа
-        return userModel.create(this.data);
+        if (this.data.group === 'student') {
+            delete this.data.group;
+
+            return studentModel.create(this.data);
+        }
+        if (this.data.group === 'staff') {
+            delete this.data.group;
+
+            return staffModel.create(this.data);
+        }
+
+        // Клиент должен указать к какой группе относится юзер
+        throw new Error('You should set \'group\' field with value: student or staff');
     }
 
     // GET /users
     getUsers() {
-        // Получаем из БД массив доков коллекции users
+        if (this.data.group === 'student') {
+            return studentModel.find({});
+        }
+        if (this.data.group === 'staff') {
+            return staffModel.find({});
+        }
+
+        // Получаем из БД массив всех доков коллекции users
         return userModel.find({});
     }
 

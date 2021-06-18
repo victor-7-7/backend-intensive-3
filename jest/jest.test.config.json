@@ -20,5 +20,5 @@
     "moduleFileExtensions": ["js", "json"],
     "globalSetup": "<rootDir>/jest/scripts/globalSetup.js",
     "globalTeardown": "<rootDir>/jest/scripts/globalTeardown.js",
-    "testURL": "http://www.test.com"
+    "testURL": "https://www.test.com"
 }

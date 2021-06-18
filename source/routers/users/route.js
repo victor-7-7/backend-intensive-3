@@ -7,7 +7,7 @@ const debug = dg('router:users');
 export const get = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        const user = new User({});
+        const user = new User(req.body);
         // Если коллекция пустая, то result == []
         const result = await user.getUsers();
         res.status(200).json(result);
@@ -20,8 +20,8 @@ export const get = async (req, res) => {
 export const post = async (req, res) => {
     debug(`${req.method} - ${req.originalUrl}`);
     try {
-        // В req.body должен быть user-объект, удовлетворяющий userSchema
-        // (свойство hash отсутствует)
+        // В req.body должен быть student/staff объект, удовлетворяющий
+        // studentSchema/staffSchema (свойство hash отсутствует)
         const user = new User(req.body);
         const result = await user.create();
         res.status(201).json(result); // 201 - Created

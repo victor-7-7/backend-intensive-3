@@ -2,19 +2,25 @@
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-import { urlValidator } from '../utils/urlValidator.js';
-
 // Схема для user
 const userSchema = new mongoose.Schema({
-    name: {
-        first: { type: String, minlength: 2, maxlength: 15 },
-        last:  { type: String, minlength: 2, maxlength: 15 },
+    hash: {
+        type:     String,
+        required: true,
+        unique:   true,
+        default:  () => uuidv4(),
     },
-    phones: [
+    name: {
+        first: { type: String, required: true, minlength: 2, maxlength: 15 },
+        last:  { type: String, required: true, minlength: 2, maxlength: 15 },
+    },
+    dateOfBirth: Date,
+    phones:      [
         {
             _id:   false, // Не добавлять автополе _id
             phone: {
                 type:     String,
+                required: true,
                 trim:     true,
                 validate: {
                     validator(value) {
@@ -36,6 +42,7 @@ const userSchema = new mongoose.Schema({
             _id:   false,
             email: {
                 type:      String,
+                required:  true,
                 trim:      true,
                 lowercase: true,
                 unique:    true,
@@ -57,29 +64,21 @@ const userSchema = new mongoose.Schema({
             primary: Boolean,
         },
     ],
-    password: String,
-    sex:      {
-        type: String,
-        enum: {
+    password: {
+        type:     String,
+        required: true,
+        select:   false,
+    },
+    sex: {
+        type:     String,
+        required: true,
+        enum:     {
             values:  [ 'm', 'f' ],
             message: 'You should write - m or f',
         },
     },
-    roles:  [ String ],
-    social: {
-        facebook: { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
-        linkedin: { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
-        github:   { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
-        skype:    { type: String, trim: true, validate: [ urlValidator, 'Invalid URL' ] },
-    },
-    notes: { type: String, maxlength: 250 },
-    hash:  {
-        type:     String,
-        required: true,
-        unique:   true,
-        default:  () => uuidv4(),
-    },
-    disabled: Boolean,
+    disabled:    Boolean,
+    description: String,
 }, { timestamps: { createdAt: 'created', updatedAt: 'modified' } });
 
 userSchema.index({ 'name.first': 1, 'name.last': 1 });
