@@ -1,5 +1,5 @@
 
-import { lessonModel, studentModel } from './index';
+import { lessonModel, studentModel } from '../odm/index';
 
 export function classPreSave(schema) {
     // Перед сохранением в БД. Срабатывает на методах класса ClassModel:

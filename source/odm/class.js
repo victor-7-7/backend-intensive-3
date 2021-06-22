@@ -1,7 +1,7 @@
 // ODM - Object Document Mapper
 import mongoose from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { classPreSave } from './classPreSavePlugin';
+import { classPreSave } from '../utils/classPreSavePlugin';
 
 const classSchema = new mongoose.Schema({
     title:       { type: String, maxlength: 30 },
